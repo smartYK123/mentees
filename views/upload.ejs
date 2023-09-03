@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Secrets</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <h1>UPLOAD IMAGE</h1>
+    <form method="post" action="/upload" enctype="multipart/form-data">
+    <input type="file" name="image"  required="">
+    <!-- <div class="img-area" data-img="">
+     <img src="data:image/png;base64,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" id="profile-pic"
+
+     >    -->
+        <!-- <i class='bx bx-upload icon' id="profile-pic" ></i> -->
+        <h3>Upload Picture</h3>
+        <p>Image size must be less than <span>2MB</span></p>
+
+        <input type="submit">
+        <button class="btn btn-lg btn-warning" onclick="history.back()">Go Back</button>
+
+         <!-- <label class="select-image" for="input-file">
+            <input type="submit" value="Upload Picture">
+
+             Upload Picture 
+        </label> -->
+</div>
+<div id="ewf_style" class="Inline">
+    <style id="webform__main-styles">
+     .container {
+        max-width: 400px;
+        width:100%;
+       background: #fff;
+       padding: 25px;
+       border-radius: 30px;
+       align-content: center;
+       text-align: center;
+       justify-content: center;
+      }
+      .img-area {
+        position: relative;
+        width:100%;
+        height: 260px;
+        background: rgb(248, 244, 244);
+        margin-bottom: 30px;
+        border-radius: 15px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        
+      }
+      .img-area .icon{
+        font-size: 60px;
+      }
+      
+       .img-area h3 {
+          font-size: 40px;
+          font-weight: 300;
+          margin-bottom: 6px;
+      
+       }
+       .img-area p {
+         color:#999
+       }
+       .img-area p span {
+         font-weight: 600;
+       }
+       .img-area img {
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        z-index: 100;
+       }
+        .img-area::before {
+            content: attr(data-img);
+             top:0;
+             position: absolute;
+        left:0;
+        width:100%;
+        height: 100%;
+        background:  rgb(0, 0, 0, .5);
+        color:#fff;
+        font-weight: 300;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: all .3s ease;
+        z-index: 200;
+      
+      
+        }
+        .img-area.active:hover::before {
+            opacity: 1;
+        }
+        .label-area {
+            background: blue;
+            border-radius: 15px;
+            display: block;
+            width:100%;
+            text-align: center;
+            color:#fff;
+      
+      
+        }
+       .select-image {
+        padding: 16px 0;
+        /* margin-left: 40px; */
+        /* color:#fff; */
+        /* margin: 16px auto; */
+        font-weight: 500;
+        font-size: 500;
+        margin-left: 120px;
+        border: none;
+        cursor: pointer;
+        transition: all .3s ease;
+        
+       }
+       #input-file{
+        display: none;
+       }
+       .label-area:hover {
+          background: rgb(22, 22, 109);
+      
+       }
+      
+    </style>
+
+      
+      
+      
+    
+</div>
+</form>
+</body>
+</html>
