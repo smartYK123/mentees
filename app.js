@@ -8,18 +8,6 @@ const multer = require("multer")
 const path = require('path')
 const fs = require('fs');
 
-// const storage = multer.diskStorage({
-//     destination: "uploads",
-//     // (req, file, cb) => {
-//     //     cb(null, "Images")
-//     // },
-//     filename: (req, file,  cb) => {
-//         // console.log(file)
-//         cb(null, file.originalname);
-//     }
-// })
-// const upload = multer({storage : storage}).single("image")
-
 app.set("view engine", "ejs");
 mongoose.connect("mongodb+srv://LSDC:g8HYem9XZlMCWSUU@cluster0.ygtgl6n.mongodb.net/menteesDB",{ useNewUrlParser: true})
 .then(() => console.log("connected succesfully"))
@@ -138,13 +126,17 @@ app.post("/", upload.single("image"),(req,res)=>{
         }
         
      })
-     mentee.save();
-     if(res){
+     mentee.save()
+     .then(()=>{
         res.redirect("/sucess")
-     }else {
-        res.redirect("/failure")
+     }).catch(() =>  res.render("failure"));
 
-     }   
+    //  if(res){
+    //     res.redirect("/sucess")
+    //  }else {
+    //     res.redirect("/failure")
+
+    //  }   
 
     //  upload(req,res, (err) =>{
     //     if(err) {
@@ -167,13 +159,16 @@ app.post("/register", function(req,res){
         username: req.body.username,
         password: req.body.password
     })
-    newUser.save();
-      if(res){
-        res.render("home")
-     }else {
-        res.redirect("failure")
+    newUser.save()
+    .then(()=>{
+        res.redirect("/home")
+     }).catch(() =>  res.render("failure"));
+    //   if(res){
+    //     res.render("home")
+    //  }else {
+    //     res.redirect("failure")
 
-     }  
+    //  }  
     })
 
 app.post("/failure", function(req, res){
