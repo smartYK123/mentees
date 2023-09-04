@@ -7,11 +7,26 @@ const app = express()
 const multer = require("multer")
 const path = require('path')
 const fs = require('fs');
-
+require('dotenv').config();
 app.set("view engine", "ejs");
-mongoose.connect("mongodb+srv://LSDC:g8HYem9XZlMCWSUU@cluster0.ygtgl6n.mongodb.net/menteesDB",{ useNewUrlParser: true})
-.then(() => console.log("connected succesfully"))
-.catch((err)=> console.log(err));
+
+
+mongoose.set('strictQuery', false);
+const connectDB = async () => {
+try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`)
+} catch (error) {
+    console.log(error);
+    process.exit(1);
+}
+}
+
+// mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true})
+// .then(() => console.log("connected succesfully"))
+// .catch((err)=> console.log(err));
+
+
 app.use(bodyParser.urlencoded({extended: true}))
 
 
@@ -128,8 +143,11 @@ app.post("/", upload.single("image"),(req,res)=>{
      })
      mentee.save()
      .then(()=>{
-        res.redirect("/sucess")
+        res.redirect("sucess")
      }).catch(() =>  res.render("failure"));
+
+
+    
 
     //  if(res){
     //     res.redirect("/sucess")
@@ -179,8 +197,11 @@ if (port == null || port == "") {
     port = 3000;
 }
 
-app.listen(port, function(){
-    console.log('server running at port 3000')
+connectDB().then(() =>{
+    app.listen(port, function(){
+        console.log(`server running at port ${port}`)
+    })
+    
 })
 
 
