@@ -8,6 +8,8 @@ const multer = require("multer")
 const path = require('path')
 const fs = require('fs');
 require('dotenv').config();
+var server = require('http').createServer(app);
+
 app.set("view engine", "ejs");
 
 
@@ -31,16 +33,16 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 
  
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'Images')
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-    }
-});
+// var storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'Images')
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+//     }
+// });
  
-var upload = multer({ storage: storage });
+// var upload = multer({ storage: storage });
 
 
 const menteeSchema = ({
@@ -52,11 +54,7 @@ const menteeSchema = ({
     designation:String,
     username: String,
     num:Number,
-    image: {
-          data:Buffer,
-          contentType: String
-
-    }
+    image: String
 })
 const userSchema = {
       username: String,
@@ -116,7 +114,7 @@ User.findOne({
 
 
 
-app.post("/", upload.single("image"), (req,res)=>{
+app.post("/", (req,res)=>{
      const mentor = req.body.mentor
      const title = req.body.title;
      const firstname  = req.body.fname;
@@ -125,6 +123,7 @@ app.post("/", upload.single("image"), (req,res)=>{
      const designation = req.body.designation;
      const username = req.body.username;
      const num = req.body.num;
+     const image = req.body.image;
 
      const mentee = new Mentee ({
         mentor:mentor,
@@ -135,10 +134,11 @@ app.post("/", upload.single("image"), (req,res)=>{
         designation:designation,
         username:username,
         num:num,
-        image: {
-            data:req.file.filename,
-            contentType: 'image/png'
-        }
+        image:image
+        // image: {
+        //     data:req.file.filename,
+        //     contentType: 'image/png'
+        // }
         
      })
      mentee.save()
