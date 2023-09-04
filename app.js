@@ -31,16 +31,16 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 
  
-// var storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'Images')
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-//     }
-// });
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'Images')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+});
  
-// var upload = multer({ storage: storage });
+var upload = multer({ storage: storage });
 
 
 const menteeSchema = ({
@@ -116,7 +116,7 @@ User.findOne({
 
 
 
-app.post("/", (req,res)=>{
+app.post("/", upload.single("image"), (req,res)=>{
      const mentor = req.body.mentor
      const title = req.body.title;
      const firstname  = req.body.fname;
@@ -125,7 +125,6 @@ app.post("/", (req,res)=>{
      const designation = req.body.designation;
      const username = req.body.username;
      const num = req.body.num;
-     const image = req.body.image;
 
      const mentee = new Mentee ({
         mentor:mentor,
@@ -136,11 +135,10 @@ app.post("/", (req,res)=>{
         designation:designation,
         username:username,
         num:num,
-        image:String
-        // image: {
-        //     data:req.file.filename,
-        //     contentType: 'image/png'
-        // }
+        image: {
+            data:req.file.filename,
+            contentType: 'image/png'
+        }
         
      })
      mentee.save()
